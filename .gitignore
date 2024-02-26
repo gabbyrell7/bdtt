@@ -1,0 +1,8 @@
+.cache
+.env
+config.yaml
+spotify_data.csv
+read_redis_hash.py
+_static/*
+_templates/*
+__pycache__/*

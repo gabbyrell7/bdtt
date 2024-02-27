@@ -21,8 +21,7 @@ def get_spotify_connection():
     Returns:
         Spotify: Spotify connection object.
     """
-    client_credentials_manager = SpotifyClientCredentials(client_id=config["spotify"]["cid"], 
-                                                          client_secret=config["spotify"]["secret"])
+    client_credentials_manager = SpotifyClientCredentials(client_id=config["spotify"]["cid"], client_secret=config["spotify"]["secret"])
 
     return spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 

@@ -14,11 +14,8 @@ if __name__ == "__main__":
     playlist_tracks = sp.playlist_tracks(playlist_id=playlist_id)
 
     # Create Playlist instance and print the information
-    my_playlist = Playlist.get_spotify_playlist(playlist_id, playlist_tracks)
-    print(my_playlist)
-
-    # Convert the playlist information to a csv file
-    Playlist.playlist_to_cvs(my_playlist)
+    my_playlist_instance = Playlist(playlist_id, playlist_tracks)
+    my_playlist = my_playlist_instance.get_spotify_playlist()
 
     # Connect to redis
     r = get_redis_connection()
@@ -26,8 +23,8 @@ if __name__ == "__main__":
     # Create and instance of RedisFuncs
     redis_funcs = RedisFuncs(r)
 
-    # Insert CSV data into Redis
-    redis_funcs.store_csv_in_redis("spotify_data.csv")
+    # Insert data into Redis
+    redis_funcs.store_playlist_in_redis("songs", my_playlist)
 
     # Use Redis to find number of songs released between specific years
     redis_funcs.songs_release_year(1985, 1995)
@@ -38,11 +35,13 @@ if __name__ == "__main__":
     # Convert Redis data to pandas dataframe
     df = redis_funcs.convert_to_pd_df()
 
+    plots = PlotOps(df)
+
     # Graph total of songs released each year
-    PlotOps.graph_songs_per_year(df)
+    plots.graph_songs_per_year()
 
     # Graph top 10 Songs based on Popularity
-    PlotOps.graph_top_10_songs(df)
+    plots.graph_top_10_songs()
 
 
 

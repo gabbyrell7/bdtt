@@ -16,30 +16,23 @@ class Song:
 
 
 class Playlist:
-    def __init__(self, playlist_id, tracks):
+    def __init__(self, playlist_id, songs):
         self.playlist_id = playlist_id
-        self.tracks = tracks
+        self.songs = songs
 
-    def add_track(self, track):
-        self.tracks.append(track)
-
-    def __str__(self):
-        return f"Playlist with {len(self.tracks)} songs."
-
-    @classmethod
-    def get_spotify_playlist(cls, playlist_id, playlist_tracks):
+    def get_spotify_playlist(self):
         # List to store Track objects
         tracks = []
 
         # Access information about each track in the playlist
-        popularity_values = [track['track']['popularity'] for track in playlist_tracks['items']]
+        popularity_values = [track['track']['popularity'] for track in self.songs['items']]
 
         # Calculate the average popularity (excluding tracks with popularity 0)
         non_zero_popularities = [pop for pop in popularity_values if pop != 0]
         average_popularity = round(sum(non_zero_popularities) / len(non_zero_popularities)) if non_zero_popularities else 0
 
         # Iterate through each track
-        for track_data in playlist_tracks['items']:
+        for track_data in self.songs['items']:
             # Extract data for each track
             popularity = track_data['track']['popularity']
             
@@ -61,31 +54,6 @@ class Playlist:
             # Append the Track object to the list
             tracks.append(track)
 
-        playlist_instance = cls(playlist_id, tracks)
+        print(f"This playlist has {len(tracks)} songs.")
 
-        return playlist_instance
-    
-    @classmethod
-    def playlist_to_cvs(cls, my_playlist):
-        # Extract songs from the Playlist instance
-        tracks = my_playlist.tracks
-
-        # Define the CSV file path
-        csv_file_path = 'spotify_data.csv'
-
-        # Write the list of dictionaries to the CSV file
-        with open(csv_file_path, 'w', newline='', encoding='utf-8') as csv_file:
-            if tracks:
-                fieldnames = tracks[0].__dict__.keys()
-                writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-
-                # Write the header
-                writer.writeheader()
-
-                # Write the data
-                for track in tracks:
-                    writer.writerow(track.__dict__)
-
-                print(f'Playlist data has been successfully exported to "{csv_file_path}"')
-            else:
-                print('Playlist is empty, cannot export to CSV.')
+        return tracks

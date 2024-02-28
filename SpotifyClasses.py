@@ -11,10 +11,6 @@ class Song:
         self.popularity = popularity
         self.track_id = track_id
 
-    def __str__(self):
-        return f"{self.artist_name} - {self.track_name} ({self.release_year})"
-
-
 class Playlist:
     def __init__(self, playlist_id, songs):
         self.playlist_id = playlist_id

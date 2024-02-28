@@ -48,12 +48,12 @@ class RedisFuncs:
             json_data = self.r.json().get(key)
             song_data = json.loads(json_data)
             popularity = float(song_data.get('popularity', 0))
+            
             if popularity > max_popularity:
                 max_popularity = popularity
                 key_with_max_popularity = key
-
-        track = song_data.get('track_name')
-        artist = song_data.get('artist_name')
+                track = song_data.get('track_name')
+                artist = song_data.get('artist_name')
 
         print(f"Key with the most popularity: {key_with_max_popularity}.")
         print(f"This is {track} by {artist}.")
